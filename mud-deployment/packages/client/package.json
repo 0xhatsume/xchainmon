@@ -19,6 +19,7 @@
     "@latticexyz/common": "2.2.7",
     "@latticexyz/dev-tools": "2.2.7",
     "@latticexyz/react": "2.2.7",
+    "@latticexyz/recs": "^2.2.7",
     "@latticexyz/schema-type": "2.2.7",
     "@latticexyz/store-sync": "2.2.7",
     "@latticexyz/utils": "2.2.7",
@@ -27,12 +28,14 @@
     "contracts": "workspace:*",
     "grid-engine": "^2.15.0",
     "phaser": "^3.55.2",
-    "react-hot-toast": "^2.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "rxjs": "7.5.5",
+    "tailwind-merge": "^2.5.2",
     "viem": "2.21.6",
-    "wagmi": "^2.5.7"
+    "wagmi": "^2.5.7",
+    "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
     "@types/react": "18.2.22",

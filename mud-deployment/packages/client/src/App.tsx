@@ -9,21 +9,24 @@ import update from './phaser/update';
 import { usePhaserGame } from './phaser/usePhaserGame';
 import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
 import { Toaster, toast } from 'react-hot-toast';
+import { EncounterScreen } from './catch/EncounterScreen';
+import { useEncounterStore } from './store/encounterStore';
 
 export const App = () => {
-  const {
-    network: { tables, useStore },
-    systemCalls: { addTask, toggleTask, deleteTask },
-  } = useMUD();
+  // const {
+  //   components: { Encounter, MapConfig, Monster, Player, Position },
+  //   network: { playerEntity },
+  //   systemCalls: { spawn },
+  // } = useMUD();
 
-  const tasks = useStore((state) => {
-    const records = Object.values(state.getRecords(tables.Tasks));
-    records.sort((a, b) => Number(a.value.createdAt - b.value.createdAt));
-    return records;
-  });
+  // const tasks = useStore((state) => {
+  //   const records = Object.values(state.getRecords(tables.Tasks));
+  //   records.sort((a, b) => Number(a.value.createdAt - b.value.createdAt));
+  //   return records;
+  // });
 
   const isLoggedIn = useIsLoggedIn();
-
+  const { encounter } = useEncounterStore();
   const gameConfig = {
     title: "GPTRPG",
     render: {
@@ -68,6 +71,12 @@ export const App = () => {
   return (
     <div className="h-screen w-full flex flex-col">
       <Navbar />
+      {encounter && (
+        <EncounterScreen
+              monsterName={"MissingNo"}
+              monsterEmoji={"💱"}
+            />
+      )}
       <div className="grow w-full bg-yellow-500
       hover:cursor-pointer
       " 
