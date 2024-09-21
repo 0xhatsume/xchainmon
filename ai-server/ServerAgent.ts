@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI, { Configuration, OpenAIApi } from "openai";
 import extract from "extract-json-from-string";
 
 import env from "./env.json";
@@ -20,11 +20,16 @@ interface ResponseObject {
   action: Action;
 }
 
-const configuration = new Configuration({
-  apiKey: env.OPENAI_API_KEY,
-});
+// const configuration = new Configuration({
+//   apiKey: env.OPENAI_API_KEY,
+// });
 
-const openai = new OpenAIApi(configuration);
+// const openai = new OpenAIApi(configuration);
+
+const openai = new OpenAI({
+  baseURL: 'https://api.red-pill.ai/v1',
+  apiKey: env.REDPILL_OPENAI_API_KEY,
+})
 
 class ServerAgent {
   id: string;
@@ -95,7 +100,12 @@ class ServerAgent {
       prompt = "YOU MUST ONLY RESPOND WITH VALID JSON OBJECTS\N" + prompt;
     }
   
-    const response = await openai.createChatCompletion({
+    // const response = await openai.createChatCompletion({
+    //   model: "gpt-3.5-turbo",
+    //   messages: [{ role: "user", content: prompt }],
+    // });
+
+    const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     });

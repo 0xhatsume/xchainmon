@@ -14,7 +14,7 @@ export const Navbar = () => {
                 <span>X-Chain-Mon</span>
             </span>
             <span className="bg-transparent w-[250px] ml-auto">
-                <DynamicWidget className="w-full"/>
+                <DynamicWidget/>
             </span>
         </nav>
     )
