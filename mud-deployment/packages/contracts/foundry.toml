@@ -27,3 +27,15 @@ eth_rpc_url = "https://rpc.garnetchain.com"
 
 [profile.redstone]
 eth_rpc_url = "https://rpc.redstonechain.com"
+
+[profile.sepolia]
+eth_rpc_url = "https://eth-sepolia.g.alchemy.com/v2/dyDfW4w8QeKwZnblTl9Wde314sPgP6pG"
+
+[profile.basesepolia]
+eth_rpc_url = "https://base-sepolia.g.alchemy.com/v2/u_KlizAu5PeUtCay9Lff-fBL1dP4qoCF"
+
+[profile.morphholesky]
+eth_rpc_url = "https://rpc-quicknode-holesky.morphl2.io"
+
+[profile.rootstocktestnet]
+eth_rpc_url = "https://rpc.testnet.rootstock.io/9w0mtuchTXthPOZ9ypAZFKPO2QmdfO-T"

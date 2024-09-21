@@ -5,6 +5,7 @@ import { MUDProvider } from "./MUDContext";
 import mudConfig from "contracts/mud.config";
 
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import {  } from '@dynamic-labs/sdk-react-core';
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import { BitcoinWalletConnectors } from "@dynamic-labs/bitcoin";
@@ -12,7 +13,7 @@ import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { createConfig, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
-import { mainnet } from "viem/chains";
+import { morphHolesky, sepolia, rootstockTestnet, flowTestnet } from "viem/chains";
 
 import "./index.css";
 
@@ -21,10 +22,13 @@ if (!rootElement) throw new Error("React root not found");
 const root = ReactDOM.createRoot(rootElement);
 
 const config = createConfig({
-  chains: [mainnet],
+  chains: [sepolia, morphHolesky, rootstockTestnet, flowTestnet],
   multiInjectedProviderDiscovery: false,
   transports: {
-    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+    [morphHolesky.id]: http(),
+    [rootstockTestnet.id]: http(),
+    [flowTestnet.id]: http()
   },
 });
 

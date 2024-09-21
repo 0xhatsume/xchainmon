@@ -1,9 +1,14 @@
+import React, {useEffect} from 'react';
 import { useMUD } from "./MUDContext";
-
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-
-
-const styleUnset = { all: "unset" } as const;
+import { Navbar } from "./components";
+import Phaser from 'phaser';
+import { GridEngine } from 'grid-engine';
+import preload from './phaser/preload';
+import create from './phaser/create';
+import update from './phaser/update';
+import { usePhaserGame } from './phaser/usePhaserGame';
+import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
+import { Toaster, toast } from 'react-hot-toast';
 
 export const App = () => {
   const {
@@ -17,107 +22,76 @@ export const App = () => {
     return records;
   });
 
+  const isLoggedIn = useIsLoggedIn();
+
+  const gameConfig = {
+    title: "GPTRPG",
+    render: {
+      antialias: false,
+    },
+    type: Phaser.AUTO,
+    physics: {
+      default: "arcade",
+    },
+    plugins: {
+      scene: [
+        {
+          key: "gridEngine",
+          plugin: GridEngine,
+          mapping: "gridEngine",
+        },
+      ],
+    },
+    scene: {
+      preload,
+      create,
+      update,
+    },
+    scale: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    parent: "game",
+    backgroundColor: "#48C4F8",
+  }
+
+  const game = usePhaserGame(gameConfig);
+
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      toast.success("You are logged in");
+    }
+  }, [isLoggedIn]);
+
   return (
-    <>
-    {/* add a nav bar */}
-    <nav className="flex items-center justify-start
-    bg-[#003a70] shadow-md
-    rounded-b-md 
-    px-4 py-2
-    ">
-      <span className="flex items-center
-      text-white text-3xl font-bold py-2"> 
-        <img src="./ethBall.png" alt="ethBall" className="w-10 h-10 mr-2" />
-        <span>X-Chain-Mon</span>
-      </span>
-      <span className="bg-transparent w-[250px] ml-auto">
-        <DynamicWidget className="w-full"/>
-      </span>
-      </nav>
-      <table>
-        <tbody>
-          {tasks.map((task) => (
-            <tr key={task.id}>
-              <td align="right">
-                <input
-                  type="checkbox"
-                  checked={task.value.completedAt > 0n}
-                  title={task.value.completedAt === 0n ? "Mark task as completed" : "Mark task as incomplete"}
-                  onChange={async (event) => {
-                    event.preventDefault();
-                    const checkbox = event.currentTarget;
+    <div className="h-screen w-full flex flex-col">
+      <Navbar />
+      <div className="grow w-full bg-yellow-500
+      hover:cursor-pointer
+      " 
+        id="game"      
+      />
 
-                    checkbox.disabled = true;
-                    try {
-                      await toggleTask(task.key.id);
-                    } finally {
-                      checkbox.disabled = false;
-                    }
-                  }}
-                />
-              </td>
-              <td>{task.value.completedAt > 0n ? <s>{task.value.description}</s> : <>{task.value.description}</>}</td>
-              <td align="right">
-                <button
-                  type="button"
-                  title="Delete task"
-                  style={styleUnset}
-                  onClick={async (event) => {
-                    event.preventDefault();
-                    if (!window.confirm("Are you sure you want to delete this task?")) return;
-
-                    const button = event.currentTarget;
-                    button.disabled = true;
-                    try {
-                      await deleteTask(task.key.id);
-                    } finally {
-                      button.disabled = false;
-                    }
-                  }}
-                >
-                  &times;
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>
-              <input type="checkbox" disabled />
-            </td>
-            <td colSpan={2}>
-              <form
-                onSubmit={async (event) => {
-                  event.preventDefault();
-                  const form = event.currentTarget;
-                  const fieldset = form.querySelector("fieldset");
-                  if (!(fieldset instanceof HTMLFieldSetElement)) return;
-
-                  const formData = new FormData(form);
-                  const desc = formData.get("description");
-                  if (typeof desc !== "string") return;
-
-                  fieldset.disabled = true;
-                  try {
-                    await addTask(desc);
-                    form.reset();
-                  } finally {
-                    fieldset.disabled = false;
-                  }
-                }}
-              >
-                <fieldset style={styleUnset}>
-                  <input type="text" name="description" />{" "}
-                  <button type="submit" title="Add task">
-                    Add
-                  </button>
-                </fieldset>
-              </form>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </>
+      <Toaster position="top-center" toastOptions={{
+          success:{
+            style:{
+              background: "#FEE9D7",
+              color: "#34222E",
+              border: "2px solid #53C576",
+              borderRadius: "0.375rem",
+            }
+          },
+          error:{
+            style:{
+              background: "#FEE9D7",
+              color: "#34222E",
+              border: "2px solid #C33030",
+              borderRadius: "0.375rem",
+            }
+          }
+        }}/>
+    </div>
   );
 };
